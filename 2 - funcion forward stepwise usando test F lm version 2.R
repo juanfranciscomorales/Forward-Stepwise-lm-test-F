@@ -2,19 +2,19 @@ forward.stepwise.testF.lm <- function(tabla.conjunto,punto.corte=0.05,steps=6) {
         
         df<- as.data.frame(tabla.conjunto)#hago por las dudas que la tabla del conjunto me la lleve a clase data frame
         
-        null<-lm(clase ~1,data = df)#modelo inicial para hacer el forward
+        null<-lm(clase ~1,data = df, na.action = na.omit)#modelo inicial para hacer el forward. na.omit hace que se omitan las filas que tienen NA values
         
-        full<-lm(clase~.,data = df)#este es el modelo con todos los descriptores, lo hago para poder armar el scope de la funcion add1
+        full<-lm(clase~.,data = df, na.action = na.omit)#este es el modelo con todos los descriptores, lo hago para poder armar el scope de la funcion add1.na.omit hace que se omitan las filas que tienen NA values 
         
         repeat {      ## repeat es un loop donde todo se repite de manera infinita hasta que se cumpla alguna de las condiciones if para darle finalizacion
                 
-                paso<-add1(null,scope=formula(full),test="F")#hago que pruebe como da cuando agrego cada una de las variables individualmente
+                paso<-add1(null,scope=formula(full),test="F", na.action = na.omit)#hago que pruebe como da cuando agrego cada una de las variables individualmente. na.omit hace que se omitan las filas que tienen NA values
                 
                 menor.probabilidad<-which.min(paso$`Pr(>F)`)#elijo cual es el que posee menor p-valor
                 
                 elegido <- noquote(row.names(paso)[menor.probabilidad])#el descriptor elegido
                 
-                formulacion <- paste(".~. +", elegido) # esta sería la nueva formula para comenzar el modelo
+                formulacion <- paste(".~. +", elegido) # esta ser?a la nueva formula para comenzar el modelo
                 
                 if ( paso$`Pr(>F)`[menor.probabilidad] >= punto.corte ) { #me fijo si el p-valor es menor a mi punto de corte, si lo es se repite el loop, sino termina aca
                         
@@ -23,7 +23,7 @@ forward.stepwise.testF.lm <- function(tabla.conjunto,punto.corte=0.05,steps=6) {
                 
                 null<-update(null, formula. = formulacion)#agrego el descriptor seleccionado por tener menor p-valor
                 
-                test <- anova(null) #hago un anova al modelo con el nuevo descriptor para obtener los p-valores de todos los terminos, asi elimino los que ahora no cumplen con el p-valor ahora que agregué un termino nuevo
+                test <- anova(null) #hago un anova al modelo con el nuevo descriptor para obtener los p-valores de todos los terminos, asi elimino los que ahora no cumplen con el p-valor ahora que agregu? un termino nuevo
                 
                 if (any(test$`Pr(>F)`>= punto.corte, na.rm = TRUE)) { #si algun p-valor de algun termino del modelo es mayor al punto de corte lo elimino
                         
@@ -32,7 +32,7 @@ forward.stepwise.testF.lm <- function(tabla.conjunto,punto.corte=0.05,steps=6) {
                         null<-update(null, formula. = formulacion2)#elimino los terminos que en el paso anterior seleccione por no cumplir con el p-valor luego del agregado del nuevo termino
                 }
                 
-                if (length(null$coefficients) >= steps + 1){ # le digo que corte cuando cumplo con el numero de steps máximo, sumo 1 porque los coeficientes son los descriptores + ordenada al origen
+                if (length(null$coefficients) >= steps + 1){ # le digo que corte cuando cumplo con el numero de steps m?ximo, sumo 1 porque los coeficientes son los descriptores + ordenada al origen
                         break
                 }
         }
@@ -41,5 +41,5 @@ forward.stepwise.testF.lm <- function(tabla.conjunto,punto.corte=0.05,steps=6) {
 }
 ###### HASTA ACA ES LA FUNCION, PRIMERO LA CARGO Y LUEGO EJECUTO LO DE ABAJO
 
-lista.modelos<- lapply(lista.conjuntos2, forward.stepwise.testF.lm, punto.corte=0.05,steps=6)# aplico a cada conjunto la función llamada forward.stepwise.testF.lm para obtener los modelos. si quiero modifico punto de corte y numero de steps
+lista.modelos<- lapply(lista.conjuntos2, forward.stepwise.testF.lm, punto.corte=0.05,steps=6)# aplico a cada conjunto la funci?n llamada forward.stepwise.testF.lm para obtener los modelos. si quiero modifico punto de corte y numero de steps
 

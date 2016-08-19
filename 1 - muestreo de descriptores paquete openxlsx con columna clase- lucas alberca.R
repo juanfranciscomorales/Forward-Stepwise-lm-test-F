@@ -1,8 +1,8 @@
 conjuntos.descriptores <- function (archivo="Dtraining.xlsx", conjuntos=1000,descrip.conjunto=200, semilla=125) { # funcion para armar conjuntos aleatorios de descriptores. conjuntos= Num de conjuntos a armar. descrip.conjunto= cant de descriptores por conjunto. archivo = archivo xlsx donde estan los descriptores. semilla = sirve para poder reproducir la misma aleatorizacion
   
-  is.installed <- function(mypkg) { is.element(mypkg, installed.packages()[,1]) }#creo funcion que se fija si me dice si mi paquete está instalado o no
+  is.installed <- function(mypkg) { is.element(mypkg, installed.packages()[,1]) }#creo funcion que se fija si me dice si mi paquete est? instalado o no
   
-  if (is.installed("openxlsx") == FALSE) {install.packages("openxlsx")} #si openxlsx no está instalado hago que me lo instale automaticamente
+  if (is.installed("openxlsx") == FALSE) {install.packages("openxlsx")} #si openxlsx no est? instalado hago que me lo instale automaticamente
   
   library(openxlsx) # cargo el paquete que tiene la funcion read.xlsx
   
@@ -10,11 +10,13 @@ conjuntos.descriptores <- function (archivo="Dtraining.xlsx", conjuntos=1000,des
   
   df <- read.xlsx(xlsxFile=archivo, check.names = TRUE) #leo el archivo con mis descriptores
   
+  df <- df[ , apply(df, 2, function(x) !any(is.na(x)))] ### elimino las columnas que contienen valores NA, o sea los descriptores que tienen aunque sea un valor NA porque esto hace que no pueda armar los modelos en el siguiente paso
+  
   n <- conjuntos # la veces que quiero que se repita el muestreo
   
   j <- c(1:ncol(df))#armo un vector de 1 a la cantidad de columnas que haya(num de descriptores)
   
-  k <- j[-c(1,2)]#elimino los primeros 3 valores de mi vector, xq no quiero samplearlos
+  k <- j[-c(1,2)]#elimino los primeros 2 valores de mi vector, xq no quiero samplearlos
   
   dflist <-list() #creo una lista vacia donde guardar los data frames
   
