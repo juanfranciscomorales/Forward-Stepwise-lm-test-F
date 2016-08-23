@@ -4,8 +4,10 @@ lista.base.datos <- list()
 
 for ( i in 1:14) {
         
-        lista.base.datos[[i]] <- clasificaciones.base.datos.ensemble.minimo.lm(base.datos  = lista.drugbank[i],cant.modelos = 50, x = tabla.AUC.ordenadas)  
+        lista.base.datos[[i]] <- clasificaciones.base.datos.ensemble.minimo.lm(base.datos  = lista.drugbank[i],cant.modelos = 10, x = tabla.AUC.ordenadas.test.set)  
 }
+
+library(plyr)
 
 tabla.scores.drugbank <- ldply(lista.base.datos, data.frame)
 

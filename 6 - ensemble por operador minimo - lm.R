@@ -56,4 +56,6 @@ combinacion.modelos.minimo <- function (x = tabla.AUC.ordenadas, cant.modelos = 
 
 resultados.ensemble.minimo <- combinacion.modelos.minimo(x = tabla.AUC.ordenadas, cant.modelos = 10)
 
+resultados.ensemble.minimo <- combinacion.modelos.minimo(x = tabla.AUC.ordenadas.test.set, cant.modelos = 10)
+
 resultados.ensemble.minimo <- combinacion.modelos.minimo(x = tabla.sensibilidad.ordenadas, cant.modelos = 10)

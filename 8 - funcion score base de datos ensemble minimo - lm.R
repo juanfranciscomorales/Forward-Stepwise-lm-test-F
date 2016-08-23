@@ -16,7 +16,7 @@ clasificaciones.base.datos.ensemble.minimo.lm <- function (base.datos = "Dtest.x
         
         tabla.valores.prediccion.base.datos <- data.frame(matrix(unlist(lista.predicciones.base.datos), nrow= length(lista.predicciones.base.datos[[1]]), byrow=FALSE))#a la lista lista.predicciones.mejores.modelos la vuelvo data frame
         
-        minimo <- apply(tabla.valores.prediccion.base.datos,1,min)#aplico operador minimo en los valores predichos de los mejores modelos para cada compuesto
+        minimo <- apply(tabla.valores.prediccion.base.datos,1,min , na.rm = TRUE)#aplico operador minimo en los valores predichos de los mejores modelos para cada compuesto
         
         tabla.predicciones.ensemble <- data.frame(minimo) ## lo transformo en data frame porque es una matrix
         

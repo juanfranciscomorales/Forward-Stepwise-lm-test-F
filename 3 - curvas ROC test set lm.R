@@ -13,7 +13,7 @@ AUC.curvas.ROC.test.set.lm <- function ( test.set= "TEST SET - Poliaminas.xlsx",
         
         df.test.set <- read.xlsx(xlsxFile = test.set, check.names = TRUE) #leo el archivo con el test set
         
-        lista.predicciones.test <- lapply(X = modelos , FUN = predict, newdata = df.test.set ) #genero una lista que contenga todas las predicciones de todos los modelos en el test set
+        lista.predicciones.test <- lapply(X = modelos , FUN = predict, newdata = df.test.set, type = "response" ) #genero una lista que contenga todas las predicciones de todos los modelos en el test set
         
         lista.roc<-list() #creo una lista vacia donde voy a poner los calculos de las curvas ROC
         
