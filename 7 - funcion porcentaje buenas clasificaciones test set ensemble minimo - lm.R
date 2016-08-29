@@ -49,3 +49,5 @@ clasificaciones.test.set.ensemble.minimo.lm(test.set = "Dtest.xlsx",cant.modelos
 clasificaciones.test.set.ensemble.minimo.lm(test.set = "Dtest.xlsx",cant.modelos = 10, x = tabla.AUC.ordenadas.test.set)
 
 clasificaciones.test.set.ensemble.minimo.lm(test.set = "Dtest.xlsx",cant.modelos = 10, x = tabla.sensibilidad.ordenadas)
+
+clasificaciones.test.set.ensemble.minimo.lm(test.set = "Dtest.xlsx",cant.modelos = 10, x = tabla.AUC.ordenadas.dude)
