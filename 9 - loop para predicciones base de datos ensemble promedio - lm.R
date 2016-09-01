@@ -4,7 +4,7 @@ lista.base.datos <- list()
 
 for ( i in 1:14) {
         
-       lista.base.datos[[i]] <- clasificaciones.base.datos.ensemble.minimo.lm(base.datos  = lista.drugbank[i],cant.modelos = 50, x = tabla.sensibilidad.ordenadas, remover.NA = FALSE)  
+       lista.base.datos[[i]] <- clasificaciones.base.datos.ensemble.promedio.lm(base.datos  = lista.drugbank[i],cant.modelos = 50, x = tabla.sensibilidad.ordenadas, remover.NA = FALSE)  
 }
 
 tabla.predicciones.drugbank <- ldply(lista.base.datos, data.frame)

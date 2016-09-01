@@ -1,5 +1,5 @@
 
-clasificaciones.test.set.ensemble.minimo.lm <- function (test.set = "Dtest.xlsx",cant.modelos = 10, x = tabla.AUC.ordenadas, remover.NA = FALSE) {
+clasificaciones.test.set.ensemble.promedio.lm <- function (test.set = "Dtest.xlsx",cant.modelos = 10, x = tabla.AUC.ordenadas, remover.NA = FALSE) {
         
         is.installed <- function(mypkg) { is.element(mypkg, installed.packages()[,1]) }#creo funcion que se fija si me dice si mi paquete está instalado o no
         
@@ -17,13 +17,13 @@ clasificaciones.test.set.ensemble.minimo.lm <- function (test.set = "Dtest.xlsx"
         
         tabla.valores.prediccion.test <- data.frame(matrix(unlist(lista.predicciones.test), nrow= length(lista.predicciones.test[[1]]), byrow=FALSE))#a la lista lista.predicciones.mejores.modelos la vuelvo data frame
         
-        minimo<-apply(tabla.valores.prediccion.test,1,min, na.rm= remover.NA)#aplico operador minimo en los valores predichos de los mejores modelos para cada compuesto
+        promedio<-apply(tabla.valores.prediccion.test,1,mean, na.rm= remover.NA)#aplico operador promedio en los valores predichos de los mejores modelos para cada compuesto
         
         clase <-df.test.set[,"clase" ] #extraigo los valores de la columna clase
         
-        resultado <- cbind(minimo,clase)
+        resultado <- cbind(promedio,clase)
         
-        colnames(resultado)<- c("minimo", "clase")
+        colnames(resultado)<- c("promedio", "clase")
         
         resultado
         
@@ -39,7 +39,7 @@ lista.predicciones.dude <- list() ## creo lista vacia donde voy a guardar las pr
 
 for ( i in 1:17) { ## hago loop para tener resultados de todas las dude
         
-        lista.predicciones.dude[[i]] <- clasificaciones.test.set.ensemble.minimo.lm(test.set   = lista.dude[i],cant.modelos = 5, x = tabla.AUC.ordenadas.dude, remover.NA = FALSE)  
+        lista.predicciones.dude[[i]] <- clasificaciones.test.set.ensemble.promedio.lm(test.set   = lista.dude[i],cant.modelos = 5, x = tabla.AUC.ordenadas.dude, remover.NA = FALSE)  
 }
 
 library(plyr)
@@ -48,11 +48,11 @@ df <- ldply(lista.predicciones.dude, data.frame) ## combino las tablas de de las
 
 df$clase[df$clase == -1] <- 0
 
-curva.roc.dude <- roc(predictor = df$minimo ,response = df$clase)
+curva.roc.dude <- roc(predictor = df$promedio ,response = df$clase)
 
 AUC.dude <- auc(curva.roc.dude)
 
-predicciones <- ifelse( df$minimo > resultados.ensemble.minimo[[4]], yes = 1,no = 0) ## predicciones aplicando el ensemble de operador minimo y usando el punto de corte que obtuve con el training
+predicciones <- ifelse( df$promedio > resultados.ensemble.promedio[[4]], yes = 1,no = 0) ## predicciones aplicando el ensemble de operador promedio y usando el punto de corte que obtuve con el training
 
 clase <-df$clase #extraigo los valores de la columna clase
 
@@ -62,7 +62,7 @@ bien.clasificados <- predicciones == clase ## veo si el ensemble me clasifico bi
 
 porcentaje.bien.clasificados <- 100*sum(bien.clasificados, na.rm = TRUE)/length(bien.clasificados) #porcentaje de buenas clasificaciones en el test set
 
-resultado.final <- list("AUC de la curva ROC", AUC.dude, "punto de corte", resultados.ensemble.minimo[[4]], "% bien clasificados test set", porcentaje.bien.clasificados,"Classification Matrix", tabla.bien.mal.clasificados) ## lista con todos los resultados que quiero que aparezcan cuando aplico la funcion
+resultado.final <- list("AUC de la curva ROC", AUC.dude, "punto de corte", resultados.ensemble.promedio[[4]], "% bien clasificados test set", porcentaje.bien.clasificados,"Classification Matrix", tabla.bien.mal.clasificados) ## lista con todos los resultados que quiero que aparezcan cuando aplico la funcion
 
 resultado.final ## pongo el resultado final
 

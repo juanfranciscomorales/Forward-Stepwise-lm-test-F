@@ -7,7 +7,7 @@ lista.base.datos <- list()
 
 for ( i in 1:14) {
         
-        lista.base.datos[[i]] <- clasificaciones.base.datos.ensemble.minimo.lm(base.datos  = lista.drugbank[i],cant.modelos = 25, x = tabla.AUC.ordenadas.dude, remover.NA = TRUE)  
+        lista.base.datos[[i]] <- clasificaciones.base.datos.ensemble.promedio.lm(base.datos  = lista.drugbank[i],cant.modelos = 25, x = tabla.AUC.ordenadas.dude, remover.NA = TRUE)  
 }
 
 library(plyr)
