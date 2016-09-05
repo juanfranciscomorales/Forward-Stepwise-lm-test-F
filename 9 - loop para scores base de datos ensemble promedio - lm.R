@@ -5,9 +5,9 @@ lista.drugbank <- c("drug bank 1.xlsx","drug bank 2.xlsx","drug bank 3.xlsx","dr
 
 lista.base.datos <- list()
 
-for ( i in 1:14) {
+for ( i in 1:length(lista.drugbank)) {
         
-        lista.base.datos[[i]] <- clasificaciones.base.datos.ensemble.promedio.lm(base.datos  = lista.drugbank[i],cant.modelos = 25, x = tabla.AUC.ordenadas.dude, remover.NA = TRUE)  
+        lista.base.datos[[i]] <- clasificaciones.base.datos.ensemble.promedio.lm(base.datos  = lista.drugbank[i],cant.modelos = 5, x = tabla.AUC.ordenadas.dude, remover.NA = TRUE)  
 }
 
 library(plyr)
