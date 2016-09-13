@@ -22,7 +22,7 @@ clasificaciones.base.datos.ensemble.promedio.lm <- function (base.datos = "Dtest
         
         tabla.valores.prediccion.base.datos$promedio <- promedio ## lo transformo en data frame porque es una matrix
         
-        tabla.valores.prediccion.base.datos$NOMBRE <- df.base.datos[, "GENERIC_NAME"] #agrego la columna de los nombres de cada compuesto
+        tabla.valores.prediccion.base.datos$NOMBRE <- df.base.datos[, "NAME"] #agrego la columna de los nombres de cada compuesto
         
         nombres <- colnames(tabla.valores.prediccion.base.datos) ## armo un vector con los nombres de las columnas
         

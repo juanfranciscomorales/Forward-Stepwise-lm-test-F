@@ -22,7 +22,7 @@ clasificaciones.base.datos.ensemble.minimo.lm <- function (base.datos = "Dtest.x
         
         tabla.valores.prediccion.base.datos$MINIMO <- minimo ## lo transformo en data frame porque es una matrix
         
-        tabla.valores.prediccion.base.datos$NOMBRE <- df.base.datos[, "GENERIC_NAME"] #agrego la columna de los nombres de cada compuesto
+        tabla.valores.prediccion.base.datos$NOMBRE <- df.base.datos[, "NAME"] #agrego la columna de los nombres de cada compuesto
         
         nombres <- colnames(tabla.valores.prediccion.base.datos) ## armo un vector con los nombres de las columnas
         
@@ -37,3 +37,6 @@ clasificaciones.base.datos.ensemble.minimo.lm <- function (base.datos = "Dtest.x
 tabla.predicciones.base.datos <- clasificaciones.base.datos.ensemble.minimo.lm(base.datos  = "Dtest.xlsx",cant.modelos = 10, x = tabla.AUC.ordenadas, remover.NA = FALSE) ## si quiero que sea por AUC
 
 tabla.predicciones.base.datos <- clasificaciones.base.datos.ensemble.minimo.lm(base.datos  = "Dtest.xlsx",cant.modelos = 10, x = tabla.sensibilidad.ordenadas, remover.NA = FALSE) ## si quiero que sea por modelos con mayor sensibilidad
+
+tabla.predicciones.base.datos <- clasificaciones.base.datos.ensemble.minimo.lm(base.datos  = "Dtest.xlsx",cant.modelos = 10, x = tabla.AUC.ordenadas.dude, remover.NA = FALSE) ## si quiero que sea por modelos con mayor AUC ROC en la base dude
+

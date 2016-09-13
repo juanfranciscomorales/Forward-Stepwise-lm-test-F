@@ -43,3 +43,4 @@ forward.stepwise.testF.lm <- function(tabla.conjunto,punto.corte=0.05,steps=6) {
 
 lista.modelos<- lapply(lista.conjuntos2, forward.stepwise.testF.lm, punto.corte=0.05,steps=6)# aplico a cada conjunto la funci?n llamada forward.stepwise.testF.lm para obtener los modelos. si quiero modifico punto de corte y numero de steps
 
+lista.modelos<- lapply(conjuntos.descriptores(archivo="TrainingSet.csv" , conjuntos=1000 , descrip.conjunto = 200,semilla = 125), forward.stepwise.testF.lm, punto.corte=0.05,steps=6)# aplico a cada conjunto la funci?n llamada forward.stepwise.testF.lm para obtener los modelos. si quiero modifico punto de corte y numero de steps

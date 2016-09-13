@@ -1,14 +1,14 @@
 ###### VOY A ARMAR UNA FUNCION PARA VER LA PREDICCION POR EL ENSEMBLE VOTING EN LOS COMPUESTOS CUANDO HAGO EL SCREENING EN UNA BASE DE DATOS
 
-clasificaciones.base.datos.ensemble.minimo.lm <- function (base.datos = "Dtest.xlsx",cant.modelos = 10, x = tabla.AUC.ordenadas, remover.NA = FALSE){
+clasificaciones.base.datos.ensemble.promedio.lm <- function (base.datos = "Dtest.csv",cant.modelos = 10, x = tabla.AUC.ordenadas, remover.NA = FALSE){
         
         is.installed <- function(mypkg) { is.element(mypkg, installed.packages()[,1]) }#creo funcion que se fija si me dice si mi paquete está instalado o no
         
-        if (is.installed("openxlsx") == FALSE) {install.packages("openxlsx")} #si openxlsx no está instalado hago que me lo instale automaticamente
+        if (is.installed("data.table") == FALSE) {install.packages("data.table")} #si data.table no está instalado hago que me lo instale automaticamente
         
-        library(openxlsx) # cargo el paquete que tiene la funcion read.xlsx
+        library(data.table) # cargo el paquete que tiene la funcion read.csv
         
-        df.base.datos <- read.xlsx(xlsxFile=base.datos, check.names = TRUE) #leo el archivo con la base de datos
+        df.base.datos <- as.data.frame(fread(input=base.datos, check.names = TRUE)) #leo el archivo con la base de datos
         
         mejores.segun.AUC <- as.numeric(x[c(1:cant.modelos),"modelo"])#extraigo los mejores "cant.modelos" modelos
         
@@ -18,15 +18,15 @@ clasificaciones.base.datos.ensemble.minimo.lm <- function (base.datos = "Dtest.x
         
         tabla.valores.prediccion.base.datos <- data.frame(matrix(unlist(lista.predicciones.base.datos), nrow= length(lista.predicciones.base.datos[[1]]), byrow=FALSE))#a la lista lista.predicciones.mejores.modelos la vuelvo data frame
         
-        minimo <- apply(tabla.valores.prediccion.base.datos,1,min , na.rm= remover.NA)#aplico operador minimo en los valores predichos de los mejores modelos para cada compuesto
+        promedio <- apply(tabla.valores.prediccion.base.datos,1,mean , na.rm= remover.NA)#aplico operador promedio en los valores predichos de los mejores modelos para cada compuesto
         
-        predicciones <- ifelse( minimo > resultados.ensemble.minimo[[4]], yes = 1,no = 0) ## predicciones aplicando el ensemble de operador minimo y usando el punto de corte que obtuve con el training
+        predicciones <- ifelse( promedio > resultados.ensemble.promedio[[4]], yes = 1,no = 0) ## predicciones aplicando el ensemble de operador promedio y usando el punto de corte que obtuve con el training
         
         predicciones.ensemble <- ifelse(predicciones == 1, yes = "activo", no = "inactivo") ## hago que si es +1 lo reemplace por activo, sino por inactivo
         
         tabla.predicciones.ensemble <- data.frame(predicciones.ensemble) ## lo transformo en data frame porque es una matrix
         
-        colnames(tabla.predicciones.ensemble)<- "Predicción por Ensemble Operador Minimo" ## le cambio el nombre a la columna
+        colnames(tabla.predicciones.ensemble)<- "Predicción por Ensemble Operador promedio" ## le cambio el nombre a la columna
         
         tabla.predicciones.ensemble$NOMBRE <- df.base.datos[, "GENERIC_NAME"] #agrego la columna de los nombres de cada compuesto
         
@@ -36,9 +36,6 @@ clasificaciones.base.datos.ensemble.minimo.lm <- function (base.datos = "Dtest.x
 
 ########### ACA TERMINA LA FUNCION, PRIMERO LA CARGO Y LUEGO EJECUTO LO DE ABAJO 
 
-tabla.predicciones.base.datos <- clasificaciones.base.datos.ensemble.minimo.lm(base.datos  = "Dtest.xlsx",cant.modelos = 10, x = tabla.AUC.ordenadas, remover.NA = FALSE) ## si quiero que sea por AUC
+tabla.predicciones.base.datos <- clasificaciones.base.datos.ensemble.promedio.lm(base.datos  = "Dtest.csv",cant.modelos = 10, x = tabla.AUC.ordenadas, remover.NA = FALSE) ## si quiero que sea por AUC
 
-tabla.predicciones.base.datos <- clasificaciones.base.datos.ensemble.minimo.lm(base.datos  = "Dtest.xlsx",cant.modelos = 10, x = tabla.sensibilidad.ordenadas, remover.NA = FALSE) ## si quiero que sea por modelos con mayor sensibilidad
-
-tabla.predicciones.base.datos <- clasificaciones.base.datos.ensemble.minimo.lm(base.datos  = "Dtest.xlsx",cant.modelos = 10, x = tabla.AUC.ordenadas.dude, remover.NA = FALSE) ## si quiero que sea por mejores modelos segun AUC ROC en la base dude
-
+tabla.predicciones.base.datos <- clasificaciones.base.datos.ensemble.promedio.lm(base.datos  = "Dtest.csv",cant.modelos = 10, x = tabla.sensibilidad.ordenadas, remover.NA = FALSE) ## si quiero que sea por modelos con mayor sensibilidad
