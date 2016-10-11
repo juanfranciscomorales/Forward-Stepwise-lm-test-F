@@ -42,4 +42,4 @@ clasificaciones.test.set.lm <- function (test.set = "Dtest.csv", lista.de.modelo
 
 ########### ACA TERMINA LA FUNCION, PRIMERO LA CARGO Y LUEGO EJECUTO LO DE ABAJO 
 
-tabla.clasificaciones.test.set <- clasificaciones.test.set.lm(test.set = "Dtest.xlsx", lista.de.modelos = lista.modelos)
+tabla.clasificaciones.test.set <- clasificaciones.test.set.lm(test.set = "Dtest.csv", lista.de.modelos = lista.modelos)
