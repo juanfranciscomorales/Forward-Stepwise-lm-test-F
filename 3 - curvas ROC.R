@@ -14,7 +14,7 @@ lista.roc<-list() #creo una lista vacia donde voy a poner los calculos de las cu
 for (i in 1:length(lista.predicciones)) { #loop para el calculo de las curvas ROC de todos los modelos
         p <-lista.conjuntos2[[1]] #extraigo el primer conjunto 
         q<-factor(p[,"clase"]) # creo el factor que va a usar la funcion roc asi hace las curvas
-        lista.roc[[i]]<- roc(predictor = lista.predicciones[[i]],response = q) #calculo la curva ROC para cada conjunto y la guardo en una lista
+        lista.roc[[i]]<- roc(predictor = lista.predicciones[[i]],response = q, direction = "<") #calculo la curva ROC para cada conjunto y la guardo en una lista
         lista.roc # lista con las curvas ROC
         }
 

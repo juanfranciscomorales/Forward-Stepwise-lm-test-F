@@ -27,7 +27,7 @@ optimizacion.punto.corte.ROC.test.set.max.especificidad <- function (test.set = 
   resumen.punto.corte<-list()#armo otra lista vacia
   
   for( i in 1:length(modelos)) { #loop donde calculos los punto de corte optimos
-          lista.punto.corte[[i]] <-OptimalCutpoints::optimal.cutpoints (X =paste(i),status="clase",tag.healthy=0, data=df,methods="MaxSp") #punto de corte optimo la especificidad sea maxima
+          lista.punto.corte[[i]] <-OptimalCutpoints::optimal.cutpoints (X =paste(i),status="clase",tag.healthy=0, data=df,methods="MaxSp", direction = "<") #punto de corte optimo la especificidad sea maxima
           resumen.punto.corte[[i]]<-OptimalCutpoints::summary.optimal.cutpoints(lista.punto.corte[[i]]) # resumen, donde pone el valor del punto de corte y los valores de sensibilidad y espeficidad para ese punto de corte
           resumen.punto.corte#resultado del loop
   }
@@ -61,5 +61,5 @@ optimizacion.punto.corte.ROC.test.set.max.especificidad <- function (test.set = 
 }
 ######## ACA TERMINA LA FUNCION, PRIMERO LA CARGO Y LUEGO EJECUTO LO DE ABAJO
 
-puntos.corte.ROC.lm <- optimizacion.punto.corte.ROC.test.set.max.especificidad(test.set = "BASE SIMULADA - Poliaminas.xlsx" , modelos = lista.modelos)
+puntos.corte.ROC.lm <- optimizacion.punto.corte.ROC.test.set.max.especificidad(test.set = "BASE SIMULADA - Poliaminas.csv" , modelos = lista.modelos)
 

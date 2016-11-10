@@ -19,7 +19,7 @@ AUC.curvas.ROC.test.set.lm <- function ( test.set= "TEST SET - Poliaminas.csv", 
         
         for (i in 1:length(lista.predicciones.test)) { #loop para el calculo de las curvas ROC de todos los modelos
                 q<-factor(df.test.set[,"clase"]) # creo el factor que va a usar la funcion roc asi hace las curvas
-                lista.roc[[i]]<- roc(predictor = lista.predicciones.test[[i]],response = q) #calculo la curva ROC para cada conjunto y la guardo en una lista
+                lista.roc[[i]]<- roc(predictor = lista.predicciones.test[[i]],response = q,direction = "<") #calculo la curva ROC para cada conjunto y la guardo en una lista
                 lista.roc # lista con las curvas ROC
         }
         

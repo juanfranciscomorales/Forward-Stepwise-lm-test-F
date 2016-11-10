@@ -30,7 +30,7 @@ clasificaciones.test.set.ensemble.promedio.lm <- function (test.set = "Dtest.csv
         
         porcentaje.bien.clasificados <- 100*sum(bien.clasificados, na.rm = TRUE)/length(bien.clasificados) #porcentaje de buenas clasificaciones en el test set
         
-        ROC.ensemble.promedio <- roc(predictor = promedio, response = clase)#creo lista donde voy a guardar las curvas ROC
+        ROC.ensemble.promedio <- roc(predictor = promedio, response = clase, direction = "<")#creo lista donde voy a guardar las curvas ROC
         
         AUC.ROC.ensemble.promedio <- summary(auc(ROC.ensemble.promedio))[["Median"]] ## valor del AUC de la curva ROC
         

@@ -28,13 +28,13 @@ combinacion.modelos.minimo <- function (x = tabla.AUC.ordenadas, cant.modelos = 
                 
         q <- factor(clase) ##hago que la columna clase se exprese como factor
         
-        ROC.ensemble.minimo <- roc(predictor = minimo, response = q)#creo lista donde voy a guardar las curvas ROC
+        ROC.ensemble.minimo <- roc(predictor = minimo, response = q, direction = "<")#creo lista donde voy a guardar las curvas ROC
        
         AUC.ROC.ensemble.minimo <- summary(auc(ROC.ensemble.minimo))[["Median"]] ## valor del AUC de la curva ROC
         
         df <- data.frame(cbind(clase,minimo)) ## creo un data frame donde tengo la clase y el valor del operador minimo para cada compuesto
         
-       punto.corte <- OptimalCutpoints::optimal.cutpoints (X = "minimo",status="clase",tag.healthy=0, data=df,methods="MaxSp") ## optimizo el punto de corte usando la funcion de maxima especificidad
+       punto.corte <- OptimalCutpoints::optimal.cutpoints (X = "minimo",status="clase",tag.healthy=0, data=df,methods="MaxSp", direction = "<") ## optimizo el punto de corte usando la funcion de maxima especificidad
         
        punto.corte2 <- data.frame(OptimalCutpoints::summary.optimal.cutpoints(punto.corte)$p.table$Global$MaxSp)["cutoff",] ## extraigo el valor de punto de corte
        

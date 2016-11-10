@@ -25,7 +25,7 @@ optimizacion.punto.corte.ROC.max.especificidad <- function (modelos = lista.mode
   resumen.punto.corte<-list()#armo otra lista vacia
   
   for( i in 1:length(modelos)) { #loop donde calculos los punto de corte optimos
-    lista.punto.corte[[i]] <-OptimalCutpoints::optimal.cutpoints (X =paste(i),status="clase",tag.healthy=0, data=df,methods="MaxSp") #punto de corte optimo la especificidad sea maxima
+    lista.punto.corte[[i]] <-OptimalCutpoints::optimal.cutpoints (X =paste(i),status="clase",tag.healthy=0, data=df,methods="MaxSp", direction = "<") #punto de corte optimo la especificidad sea maxima
     resumen.punto.corte[[i]]<-OptimalCutpoints::summary.optimal.cutpoints(lista.punto.corte[[i]]) # resumen, donde pone el valor del punto de corte y los valores de sensibilidad y espeficidad para ese punto de corte
     resumen.punto.corte#resultado del loop
   }

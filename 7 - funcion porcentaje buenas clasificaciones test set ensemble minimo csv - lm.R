@@ -30,7 +30,7 @@ clasificaciones.test.set.ensemble.minimo.lm <- function (test.set = "Dtest.csv",
         
         porcentaje.bien.clasificados <- 100*sum(bien.clasificados, na.rm = TRUE)/length(bien.clasificados) #porcentaje de buenas clasificaciones en el test set
         
-        ROC.ensemble.minimo <- roc(predictor = minimo, response = clase)#creo lista donde voy a guardar las curvas ROC
+        ROC.ensemble.minimo <- roc(predictor = minimo, response = clase, direction = "<")#creo lista donde voy a guardar las curvas ROC
         
         AUC.ROC.ensemble.minimo <- summary(auc(ROC.ensemble.minimo))[["Median"]] ## valor del AUC de la curva ROC
         
