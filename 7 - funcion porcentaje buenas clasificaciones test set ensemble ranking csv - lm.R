@@ -24,9 +24,11 @@ clasificaciones.test.set.ensemble.ranking.lm <- function (test.set = "Dtest.csv"
         
         clase <-df.test.set[,"clase" ] #extraigo los valores de la columna clase
         
-        ROC.ensemble.promedio.ranking <- roc(predictor = promedio.ranking, response = clase, direction = ">")#creo lista donde voy a guardar las curvas ROC
+        ROC.ensemble.promedio.ranking <- roc(predictor = promedio.ranking, response = clase, direction = ">" , ci = TRUE , auc = TRUE , conf.level=0.95 , ci.method = "delong", boot.n = 2000, boot.stratified = TRUE, reuse.auc=TRUE)#creo lista donde voy a guardar las curvas ROC
         
-        AUC.ROC.ensemble.promedio.ranking <- summary(auc(ROC.ensemble.promedio.ranking))[["Median"]] ## valor del AUC de la curva ROC
+        AUC.ROC.ensemble.promedio.ranking <- ROC.ensemble.promedio.ranking$auc[[1]] ### extraigo el AUC de la curva ROC
+        
+        int.conf.95.AUC.ROC <- ROC.ensemble.promedio.ranking$ci ## extraigo el intervalo de confianza del AUC ROC
         
         df <- data.frame(cbind(clase,promedio.ranking)) ## creo un data frame donde tengo la clase y el valor del operador promedio.ranking para cada compuesto
         
@@ -42,7 +44,7 @@ clasificaciones.test.set.ensemble.ranking.lm <- function (test.set = "Dtest.csv"
         
         porcentaje.bien.clasificados <- 100*sum(bien.clasificados, na.rm = TRUE)/length(bien.clasificados) #porcentaje de buenas clasificaciones en el training set
         
-        resultado.final <- list("AUC de la curva ROC", AUC.ROC.ensemble.promedio.ranking, "punto de corte", punto.corte2, "% bien clasificados test set",porcentaje.bien.clasificados,"Classification Matrix", tabla.bien.mal.clasificados) ## lista con todos los resultados que quiero que aparezcan cuando aplico la funcion
+        resultado.final <- list("AUC de la curva ROC", AUC.ROC.ensemble.promedio.ranking, "Int Confianza AUC ROC" ,int.conf.95.AUC.ROC ,"punto de corte", punto.corte2, "% bien clasificados test set",porcentaje.bien.clasificados,"Classification Matrix", tabla.bien.mal.clasificados) ## lista con todos los resultados que quiero que aparezcan cuando aplico la funcion
         
         resultado.final ## pongo el resultado final
         

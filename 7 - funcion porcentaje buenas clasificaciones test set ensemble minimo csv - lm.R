@@ -20,7 +20,7 @@ clasificaciones.test.set.ensemble.minimo.lm <- function (test.set = "Dtest.csv",
         
         minimo<-apply(tabla.valores.prediccion.test,1,min, na.rm= remover.NA)#aplico operador minimo en los valores predichos de los mejores modelos para cada compuesto
         
-        predicciones <- ifelse( minimo > resultados.ensemble.minimo[[4]], yes = 1,no = 0) ## predicciones aplicando el ensemble de operador minimo y usando el punto de corte que obtuve con el training
+        predicciones <- ifelse( minimo > resultados.ensemble.minimo[[6]], yes = 1,no = 0) ## predicciones aplicando el ensemble de operador minimo y usando el punto de corte que obtuve con el training
         
         clase <-df.test.set[,"clase" ] #extraigo los valores de la columna clase
        
@@ -30,12 +30,13 @@ clasificaciones.test.set.ensemble.minimo.lm <- function (test.set = "Dtest.csv",
         
         porcentaje.bien.clasificados <- 100*sum(bien.clasificados, na.rm = TRUE)/length(bien.clasificados) #porcentaje de buenas clasificaciones en el test set
         
-        ROC.ensemble.minimo <- roc(predictor = minimo, response = clase, direction = "<")#creo lista donde voy a guardar las curvas ROC
+        ROC.ensemble.minimo <- roc(predictor = minimo, response = clase, direction = "<" , ci = TRUE , auc = TRUE , conf.level=0.95 , ci.method = "delong", boot.n = 2000, boot.stratified = TRUE, reuse.auc=TRUE)#creo lista donde voy a guardar las curvas ROC
         
-        AUC.ROC.ensemble.minimo <- summary(auc(ROC.ensemble.minimo))[["Median"]] ## valor del AUC de la curva ROC
+        AUC.ROC.ensemble.minimo <- ROC.ensemble.minimo$auc[[1]] ### extraigo el AUC de la curva ROC
         
+        int.conf.95.AUC.ROC <- ROC.ensemble.minimo$ci ## extraigo el intervalo de confianza del AUC ROC
         
-        resultado.final <- list("AUC de la curva ROC", AUC.ROC.ensemble.minimo,"punto de corte", resultados.ensemble.minimo[[4]], "% bien clasificados test set", porcentaje.bien.clasificados,"Classification Matrix", tabla.bien.mal.clasificados) ## lista con todos los resultados que quiero que aparezcan cuando aplico la funcion
+        resultado.final <- list("AUC de la curva ROC", AUC.ROC.ensemble.minimo,"Int Confianza AUC ROC" ,int.conf.95.AUC.ROC ,"punto de corte", resultados.ensemble.minimo[[6]], "% bien clasificados test set", porcentaje.bien.clasificados,"Classification Matrix", tabla.bien.mal.clasificados) ## lista con todos los resultados que quiero que aparezcan cuando aplico la funcion
         
         resultado.final ## pongo el resultado final
         

@@ -28,9 +28,11 @@ clasificaciones.test.set.ensemble.voto.lm <- function (test.set = "Dtest.csv",ca
         
         clase <-df.test.set[,"clase" ] #extraigo los valores de la columna clase
         
-        ROC.ensemble.promedio.voto <- roc(predictor = promedio.voto, response = clase, direction = "<")#creo lista donde voy a guardar las curvas ROC
+        ROC.ensemble.promedio.voto <- roc(predictor = promedio.voto, response = clase, direction = "<" , ci = TRUE , auc = TRUE , conf.level=0.95 , ci.method = "delong", boot.n = 2000, boot.stratified = TRUE, reuse.auc=TRUE)#creo lista donde voy a guardar las curvas ROC
         
-        AUC.ROC.ensemble.promedio.voto <- summary(auc(ROC.ensemble.promedio.voto))[["Median"]] ## valor del AUC de la curva ROC
+        AUC.ROC.ensemble.promedio.voto <- ROC.ensemble.promedio.voto$auc[[1]] ### extraigo el AUC de la curva ROC
+        
+        int.conf.95.AUC.ROC <- ROC.ensemble.promedio.voto$ci ## extraigo el intervalo de confianza del AUC ROC
         
         df <- data.frame(cbind(clase,promedio.voto)) ## creo un data frame donde tengo la clase y el valor del operador promedio.voto para cada compuesto
         
@@ -46,7 +48,7 @@ clasificaciones.test.set.ensemble.voto.lm <- function (test.set = "Dtest.csv",ca
         
         porcentaje.bien.clasificados <- 100*sum(bien.clasificados, na.rm = TRUE)/length(bien.clasificados) #porcentaje de buenas clasificaciones en el training set
         
-        resultado.final <- list("AUC de la curva ROC", AUC.ROC.ensemble.promedio.voto, "punto de corte", punto.corte2, "% bien clasificados test set",porcentaje.bien.clasificados,"Classification Matrix", tabla.bien.mal.clasificados) ## lista con todos los resultados que quiero que aparezcan cuando aplico la funcion
+        resultado.final <- list("AUC de la curva ROC", AUC.ROC.ensemble.promedio.voto, "Int Confianza AUC ROC" ,int.conf.95.AUC.ROC ,"punto de corte", punto.corte2, "% bien clasificados test set",porcentaje.bien.clasificados,"Classification Matrix", tabla.bien.mal.clasificados) ## lista con todos los resultados que quiero que aparezcan cuando aplico la funcion
         
         resultado.final ## pongo el resultado final
         

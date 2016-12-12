@@ -28,9 +28,11 @@ combinacion.modelos.minimo <- function (x = tabla.AUC.ordenadas, cant.modelos = 
                 
         q <- factor(clase) ##hago que la columna clase se exprese como factor
         
-        ROC.ensemble.minimo <- roc(predictor = minimo, response = q, direction = "<")#creo lista donde voy a guardar las curvas ROC
+        ROC.ensemble.minimo <- roc(predictor = minimo, response = q, direction = "<" , ci = TRUE , auc = TRUE , conf.level=0.95 , ci.method = "delong", boot.n = 2000, boot.stratified = TRUE, reuse.auc=TRUE)#creo lista donde voy a guardar las curvas ROC
        
-        AUC.ROC.ensemble.minimo <- summary(auc(ROC.ensemble.minimo))[["Median"]] ## valor del AUC de la curva ROC
+        AUC.ROC.ensemble.minimo <- ROC.ensemble.minimo$auc[[1]] ### extraigo el AUC de la curva ROC
+        
+        int.conf.95.AUC.ROC <- ROC.ensemble.minimo$ci ## extraigo el intervalo de confianza del AUC ROC
         
         df <- data.frame(cbind(clase,minimo)) ## creo un data frame donde tengo la clase y el valor del operador minimo para cada compuesto
         
@@ -46,7 +48,7 @@ combinacion.modelos.minimo <- function (x = tabla.AUC.ordenadas, cant.modelos = 
        
        porcentaje.bien.clasificados <- 100*sum(bien.clasificados, na.rm = TRUE)/length(bien.clasificados) #porcentaje de buenas clasificaciones en el training set
        
-       resultado.final <- list("AUC de la curva ROC", AUC.ROC.ensemble.minimo, "punto de corte", punto.corte2, "% bien clasificados training set",porcentaje.bien.clasificados,"Classification Matrix", tabla.bien.mal.clasificados) ## lista con todos los resultados que quiero que aparezcan cuando aplico la funcion
+       resultado.final <- list("AUC de la curva ROC", AUC.ROC.ensemble.minimo,"Int Confianza AUC ROC" ,int.conf.95.AUC.ROC ,  "punto de corte", punto.corte2, "% bien clasificados training set",porcentaje.bien.clasificados,"Classification Matrix", tabla.bien.mal.clasificados) ## lista con todos los resultados que quiero que aparezcan cuando aplico la funcion
        
        resultado.final ## pongo el resultado final
        
