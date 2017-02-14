@@ -1,3 +1,5 @@
+
+
 forward.stepwise.testF.lm <- function(tabla.conjunto,punto.corte=0.05,steps=6) { # funcion para realizar los modelos por lm
         
         df<- as.data.frame(tabla.conjunto)#hago por las dudas que la tabla del conjunto me la lleve a clase data frame
@@ -36,9 +38,13 @@ forward.stepwise.testF.lm <- function(tabla.conjunto,punto.corte=0.05,steps=6) {
                         break
                 }
         }
+        
         result <-null
+        
         result   # es el modelo que me da como resultado
+
 }
+
 ###### HASTA ACA ES LA FUNCION, PRIMERO LA CARGO Y LUEGO EJECUTO LO DE ABAJO
 
 lista.modelos<- lapply(lista.conjuntos2, forward.stepwise.testF.lm, punto.corte=0.05,steps=6)# aplico a cada conjunto la funci?n llamada forward.stepwise.testF.lm para obtener los modelos. si quiero modifico punto de corte y numero de steps

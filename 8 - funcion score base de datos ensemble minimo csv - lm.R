@@ -42,3 +42,9 @@ tabla.predicciones.base.datos <- clasificaciones.base.datos.ensemble.minimo.lm(b
 
 tabla.predicciones.base.datos <- clasificaciones.base.datos.ensemble.minimo.lm(base.datos  = "Dtest.csv",cant.modelos = 10, x = tabla.AUC.ordenadas.test.set, remover.NA = FALSE) ## si quiero que sea por AUC
 
+
+#######################################
+
+library(openxlsx)
+
+write.xlsx(x= tabla.predicciones.base.datos, file= "Screening por Ensemble Minimo.xlsx" , colNames= TRUE, keepNA=TRUE) # funcion para guardar los resultados del screening en la base de datos
