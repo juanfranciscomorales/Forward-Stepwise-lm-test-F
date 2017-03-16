@@ -18,9 +18,11 @@ clasificaciones.test.set.ensemble.minimo.lm <- function (test.set = "Dtest.csv",
         
         tabla.valores.prediccion.test <- data.frame(matrix(unlist(lista.predicciones.test), nrow= length(lista.predicciones.test[[1]]), byrow=FALSE))#a la lista lista.predicciones.mejores.modelos la vuelvo data frame
         
+        score.mejor.modelo.individual <- tabla.valores.prediccion.test[,1] ## extraigo la primer columna  que es la que tiene los scores del mejor modelo individual
+        
         minimo<-apply(tabla.valores.prediccion.test,1,min, na.rm= remover.NA)#aplico operador minimo en los valores predichos de los mejores modelos para cada compuesto
         
-        predicciones <- ifelse( minimo > resultados.ensemble.minimo[[6]], yes = 1,no = 0) ## predicciones aplicando el ensemble de operador minimo y usando el punto de corte que obtuve con el training
+        predicciones <- ifelse( minimo > resultados.ensemble.minimo[[8]], yes = 1,no = 0) ## predicciones aplicando el ensemble de operador minimo y usando el punto de corte que obtuve con el training
         
         clase <-df.test.set[,"clase" ] #extraigo los valores de la columna clase
        
@@ -36,7 +38,11 @@ clasificaciones.test.set.ensemble.minimo.lm <- function (test.set = "Dtest.csv",
         
         int.conf.95.AUC.ROC <- ROC.ensemble.minimo$ci ## extraigo el intervalo de confianza del AUC ROC
         
-        resultado.final <- list("AUC de la curva ROC", AUC.ROC.ensemble.minimo,"Int Confianza AUC ROC" ,int.conf.95.AUC.ROC ,"punto de corte", resultados.ensemble.minimo[[6]], "% bien clasificados test set", porcentaje.bien.clasificados,"Classification Matrix", tabla.bien.mal.clasificados) ## lista con todos los resultados que quiero que aparezcan cuando aplico la funcion
+        ROC.mejor.individual<- roc(predictor = score.mejor.modelo.individual, response = clase, direction = "<" , ci = TRUE , auc = TRUE , conf.level=0.95 , ci.method = "delong", boot.n = 2000, boot.stratified = TRUE, reuse.auc=TRUE)#creo lista donde voy a guardar las curvas ROC
+        
+        test.AUC <- roc.test(roc1 = ROC.ensemble.minimo , roc2 = ROC.mejor.individual , method = "delong" , alternative = "two.sided")## test para comparar las AUC entre la del ensemble y el mejor modelo individual
+        
+        resultado.final <- list("AUC de la curva ROC", AUC.ROC.ensemble.minimo,"Int Confianza AUC ROC" ,int.conf.95.AUC.ROC ,"Comparación AUC ROC ensemble vs AUC ROC mejor modelo individual" , test.AUC , "punto de corte", resultados.ensemble.minimo[[8]], "% bien clasificados test set", porcentaje.bien.clasificados,"Classification Matrix", tabla.bien.mal.clasificados) ## lista con todos los resultados que quiero que aparezcan cuando aplico la funcion
         
         resultado.final ## pongo el resultado final
         

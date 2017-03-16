@@ -20,6 +20,8 @@ combinacion.modelos.promedio <- function (x = tabla.AUC.ordenadas, cant.modelos 
         
         tabla.valores.prediccion <- data.frame(matrix(unlist(lista.predicciones.mejores.modelos), nrow= length(lista.predicciones.mejores.modelos[[1]]), byrow=FALSE))#a la lista lista.predicciones.mejores.modelos la vuelvo data frame
         
+        score.mejor.modelo.individual <- tabla.valores.prediccion[,1] ## extraigo la primer columna  que es la que tiene los scores del mejor modelo individual
+        
         promedio<-apply(tabla.valores.prediccion,1,mean, na.rm= remover.NA)#aplico operador promedio en los valores predichos de los mejores modelos para cada compuesto
         
         p <-lista.conjuntos2[[1]] #extraigo el primer conjunto 
@@ -33,6 +35,10 @@ combinacion.modelos.promedio <- function (x = tabla.AUC.ordenadas, cant.modelos 
         AUC.ROC.ensemble.promedio <- ROC.ensemble.promedio$auc[[1]] ### extraigo el AUC de la curva ROC
         
         int.conf.95.AUC.ROC <- ROC.ensemble.promedio$ci ## extraigo el intervalo de confianza del AUC ROC
+        
+        ROC.mejor.individual<- roc(predictor = score.mejor.modelo.individual, response = q, direction = "<" , ci = TRUE , auc = TRUE , conf.level=0.95 , ci.method = "delong", boot.n = 2000, boot.stratified = TRUE, reuse.auc=TRUE)#creo lista donde voy a guardar las curvas ROC
+        
+        test.AUC <- roc.test(roc1 = ROC.ensemble.promedio , roc2 = ROC.mejor.individual , method = "delong" , alternative = "two.sided")
         
         df <- data.frame(cbind(clase,promedio)) ## creo un data frame donde tengo la clase y el valor del operador promedio para cada compuesto
         
@@ -48,7 +54,7 @@ combinacion.modelos.promedio <- function (x = tabla.AUC.ordenadas, cant.modelos 
        
        porcentaje.bien.clasificados <- 100*sum(bien.clasificados, na.rm = TRUE)/length(bien.clasificados) #porcentaje de buenas clasificaciones en el training set
        
-       resultado.final <- list("AUC de la curva ROC", AUC.ROC.ensemble.promedio, "Int Confianza AUC ROC" ,int.conf.95.AUC.ROC , "punto de corte", punto.corte2, "% bien clasificados training set",porcentaje.bien.clasificados,"Classification Matrix", tabla.bien.mal.clasificados) ## lista con todos los resultados que quiero que aparezcan cuando aplico la funcion
+       resultado.final <- list("AUC de la curva ROC", AUC.ROC.ensemble.promedio, "Int Confianza AUC ROC" ,int.conf.95.AUC.ROC ,"Comparación AUC ROC ensemble vs AUC ROC mejor modelo individual" , test.AUC , "punto de corte", punto.corte2, "% bien clasificados training set",porcentaje.bien.clasificados,"Classification Matrix", tabla.bien.mal.clasificados) ## lista con todos los resultados que quiero que aparezcan cuando aplico la funcion
        
        resultado.final ## pongo el resultado final
        

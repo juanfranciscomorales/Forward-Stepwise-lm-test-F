@@ -18,7 +18,7 @@ conjuntos.descriptores <- function (archivo="Dtraining.csv", conjuntos=1000,desc
   
   df <- df[ , apply(df, 2, function(x) !any(is.na(x)))] ### elimino las columnas que contienen valores NA, o sea los descriptores que tienen aunque sea un valor NA porque esto hace que no pueda armar los modelos en el siguiente paso
   
-  ##df <- df[ , -nearZeroVar(df)] ### elimino las columnas que tienen poca varianza
+  df <- df[ , -nearZeroVar(df)] ### elimino las columnas que tienen poca varianza
   
   n <- conjuntos # la veces que quiero que se repita el muestreo
   

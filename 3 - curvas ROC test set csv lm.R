@@ -43,3 +43,5 @@ AUC.curvas.ROC.test.set.lm <- function ( test.set= "TEST SET - Poliaminas.csv", 
 
 tabla.AUC.ordenadas.test.set <- AUC.curvas.ROC.test.set.lm( test.set= "TEST SET - Poliaminas.csv", modelos = lista.modelos) # aplico mi funcion a la lista de modelos armada con la funcion anterior, como resultado obtengo una tabla con los valores de AUC ordenadas por mejores modelos
 
+tabla.AUC.ordenadas.dude <- AUC.curvas.ROC.test.set.lm( test.set= "Dude + test Sofia.csv", modelos = lista.modelos) # aplico mi funcion a la lista de modelos armada con la funcion anterior, como resultado obtengo una tabla con los valores de AUC ordenadas por mejores modelos
+
