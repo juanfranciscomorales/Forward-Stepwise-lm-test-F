@@ -32,11 +32,26 @@ forward.stepwise.testF.lm <- function(tabla.conjunto , punto.corte=0.05 , steps=
                 
                 null <- update(null, formula. = formulacion)#agrego el descriptor seleccionado por tener menor p-valor
                 
-                if (length(null$coefficients) > 2){ # le digo que si tengo mas de 2 coeficientes, que significa que tiene mas de dos variables haga el calculo del vif
+                if (length(null$coefficients) == 3){ # le digo que si tiene 3 coeficientes, que significa que tiene dos variables para hacer el calculo de vif.
                         
                         test.vif <- data.frame(vif(null)) # calculo el vif de cada termino. quiero que sea menor a punto.corte.vif = 2, es bastante exigente esto, porque con menor a 5 esta bien.
                         
-                        if (test.vif[nrow(test.vif),1] >= punto.corte.vif) { #si algun termino no cumple con el valor de vif lo elimino
+                        if (test.vif[nrow(test.vif),1] >= punto.corte.vif) { #si algun termino no cumple con el valor de vif lo elimino. Como son solo 2 terminos, si uno no cumple el vif el otro tampoco, por ende solo elimino el que estaba intentando agregar al modelo
+                                
+                                formulacion2 <- paste(".~. -",paste(noquote(rownames(test.vif)[nrow(test.vif)]) ,collapse = " - ")) # selecciono los valores que no cumplen con mi VIF
+                                
+                                null<-update(null, formula. = formulacion2)#elimino los terminos que en el paso anterior seleccione por no cumplir con el vif luego del agregado del nuevo termino
+                                
+                                full <- update(full, formula. = formulacion2) ### elimino las variables del modelo full que no cumplen con el VIF para que no intenten ingresar otra vez al modelo
+                                
+                        }
+                }
+                
+                if (length(null$coefficients) > 3){ # le digo que si tengo mas de 3 coeficientes, que significa que tiene 3 o mas variables haga el calculo del vif. Lo diferencio de la situación de cuando tengo 2 variables porque en este caso si puede suceder que una sola no cumple el vif, en cambio en la situacion de 2 variables si no cumple una tampoco cumple la otra
+                        
+                        test.vif <- data.frame(vif(null)) # calculo el vif de cada termino. quiero que sea menor a punto.corte.vif = 2, es bastante exigente esto, porque con menor a 5 esta bien.
+                        
+                        if (any(test.vif[,1] >= punto.corte.vif)) { #si algun termino no cumple con el valor de vif lo elimino
                                 
                                 formulacion2 <- paste(".~. -",paste(noquote(rownames(test.vif)[nrow(test.vif)]) ,collapse = " - ")) # selecciono los valores que no cumplen con mi VIF
                                 
