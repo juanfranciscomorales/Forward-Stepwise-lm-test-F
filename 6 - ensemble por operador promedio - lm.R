@@ -69,3 +69,7 @@ resultados.ensemble.promedio <- combinacion.modelos.promedio(x = tabla.AUC.orden
 resultados.ensemble.promedio <- combinacion.modelos.promedio(x = tabla.AUC.ordenadas.dude, cant.modelos = 10, remover.NA = FALSE)
 
 resultados.ensemble.promedio <- combinacion.modelos.promedio(x = tabla.sensibilidad.ordenadas, cant.modelos = 10, remover.NA = FALSE)
+
+resultados.ensemble.promedio <- combinacion.modelos.promedio(x = tabla.porcentajes.buenas.clasificaciones.k.fold.CV.lm, cant.modelos = 10, remover.NA = FALSE)
+
+resultados.ensemble.promedio <- combinacion.modelos.promedio(x = tabla.AUROC.k.fold.CV.lm, cant.modelos = 10, remover.NA = FALSE)

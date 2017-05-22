@@ -1,4 +1,8 @@
 
+data_set <- "S-M test set lm.csv"
+
+tabla <- tabla.AUROC.k.fold.CV.lm
+
 ###### ENSEMBLE PROMEDIO ########
 
 vector.AUC.ensembles <- vector()  ## creo vector vacio donde voy a poner las AUC ROC
@@ -13,7 +17,7 @@ cant.modelos <- 1:100 ## le doy la secuencia de la cantidad de modelos a combina
 
 for( i in cant.modelos){
         
-        resultado <- clasificaciones.test.set.ensemble.promedio.lm(test.set = "dudes75.csv",cant.modelos = i, x = tabla.AUC.ordenadas.test.set, remover.NA = FALSE)
+        resultado <- clasificaciones.test.set.ensemble.promedio.lm(test.set = data_set ,cant.modelos = i, x = tabla, remover.NA = FALSE)
         
         vector.AUC.ensembles[i] <-resultado[[2]]
 
@@ -61,7 +65,7 @@ cant.modelos <- 1:100 ## le doy la secuencia de la cantidad de modelos a combina
 
 for( i in cant.modelos){
         
-        resultado <- clasificaciones.test.set.ensemble.minimo.lm(test.set = "dudes75.csv",cant.modelos = i, x = tabla.AUC.ordenadas.test.set, remover.NA = FALSE)
+        resultado <- clasificaciones.test.set.ensemble.minimo.lm(test.set = data_set,cant.modelos = i, x = tabla, remover.NA = FALSE)
         
         vector.AUC.ensembles[i] <-resultado[[2]]
         
@@ -107,7 +111,7 @@ cant.modelos <- 1:100 ## le doy la secuencia de la cantidad de modelos a combina
 
 for( i in cant.modelos){
         
-        resultado <- clasificaciones.test.set.ensemble.voto.lm(test.set = "dudes75.csv",cant.modelos = i, x = tabla.AUC.ordenadas.test.set, remover.NA = FALSE)
+        resultado <- clasificaciones.test.set.ensemble.voto.lm(test.set = data_set,cant.modelos = i, x = tabla, remover.NA = FALSE)
         
         vector.AUC.ensembles[i] <-resultado[[2]]
         
@@ -153,7 +157,7 @@ cant.modelos <- 1:100 ## le doy la secuencia de la cantidad de modelos a combina
 
 for( i in cant.modelos){
         
-        resultado <- clasificaciones.test.set.ensemble.ranking.lm(test.set = "dudes75.csv",cant.modelos = i, x = tabla.AUC.ordenadas.test.set, remover.NA = FALSE)
+        resultado <- clasificaciones.test.set.ensemble.ranking.lm(test.set = data_set ,cant.modelos = i, x = tabla, remover.NA = FALSE)
         
         vector.AUC.ensembles[i] <-resultado[[2]]
         

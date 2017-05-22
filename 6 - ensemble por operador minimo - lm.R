@@ -69,3 +69,7 @@ resultados.ensemble.minimo <- combinacion.modelos.minimo(x = tabla.AUC.ordenadas
 resultados.ensemble.minimo <- combinacion.modelos.minimo(x = tabla.AUC.ordenadas.dude, cant.modelos = 10, remover.NA = FALSE)
 
 resultados.ensemble.minimo <- combinacion.modelos.minimo(x = tabla.sensibilidad.ordenadas, cant.modelos = 10, remover.NA = FALSE)
+
+resultados.ensemble.minimo <- combinacion.modelos.minimo(x = tabla.porcentajes.buenas.clasificaciones.k.fold.CV.lm, cant.modelos = 10, remover.NA = FALSE)
+
+resultados.ensemble.minimo <- combinacion.modelos.minimo(x = tabla.AUROC.k.fold.CV.lm, cant.modelos = 10, remover.NA = FALSE)
