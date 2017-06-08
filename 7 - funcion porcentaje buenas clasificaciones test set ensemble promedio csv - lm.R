@@ -1,6 +1,6 @@
 #####VOY A INTENTAR ARMAR UNA FUNCION PARA VER EL % DE BUENAS CLASIFICACIONES EN EL TEST SET POR EL ENSEMBLE promedio
 
-clasificaciones.test.set.ensemble.promedio.lm <- function (test.set = "Dtest.csv",cant.modelos = 10, x = tabla.AUC.ordenadas, remover.NA = FALSE){
+clasificaciones.test.set.ensemble.promedio.lm <- function (test.set = "Dtest.csv",cant.modelos = 10, x = tabla.AUC.ordenadas, remover.NA = FALSE , graficar = TRUE){
         
         is.installed <- function(mypkg) { is.element(mypkg, installed.packages()[,1]) }#creo funcion que se fija si me dice si mi paquete está instalado o no
         
@@ -32,7 +32,7 @@ clasificaciones.test.set.ensemble.promedio.lm <- function (test.set = "Dtest.csv
         
         porcentaje.bien.clasificados <- 100*sum(bien.clasificados, na.rm = TRUE)/length(bien.clasificados) #porcentaje de buenas clasificaciones en el test set
         
-        ROC.ensemble.promedio <- roc(predictor = promedio, response = clase, direction = "<" , ci = TRUE , auc = TRUE , conf.level=0.95 , ci.method = "delong", boot.n = 2000, boot.stratified = TRUE, reuse.auc=TRUE)#creo lista donde voy a guardar las curvas ROC
+        ROC.ensemble.promedio <- roc(predictor = promedio, response = clase, direction = "<" , ci = TRUE , auc = TRUE , conf.level=0.95 , ci.method = "delong", boot.n = 2000, boot.stratified = TRUE, reuse.auc=TRUE, plot = graficar , print.auc = TRUE, main = "Test set - lm - Ensemble Promedio")#creo lista donde voy a guardar las curvas ROC
         
         AUC.ROC.ensemble.promedio <- ROC.ensemble.promedio$auc[[1]] ### extraigo el AUC de la curva ROC
         
@@ -44,19 +44,11 @@ clasificaciones.test.set.ensemble.promedio.lm <- function (test.set = "Dtest.csv
         
         ## EN ESTA SECCION DE LA FUNCION ES TODO PARA ARMAR LOS GRAFICOS QUE VAN A APARECER PARA ANALIZAR LOS RESULTADOS
         
+        if( graficar == TRUE) {
+        
         library(ROCR) ## abro el paquete ROCR
         
         predicciones <- prediction(predictions = promedio, labels = clase) ## genero los valores para armar los diferentes graficos
-        
-        plot(performance(predicciones , measure = "tpr" , x.measure = "fpr"), main ="ROC Curve Test o Dude") ## grafico de PPV versus punto de corte
-        
-        abline(0,1) ### agrego la linea que muestra como seria la clasificacion si fuese aleatoria
-        
-        plot(performance(predicciones , measure = "mat" , x.measure = "cutoff"), main = "MCC vs cutoff") ## grafico el valor del MCC(Matthews Correlation Coefficient) , mientas mas cercano a 1 mejor, mayor a 0.7 seria optimo. Es una medida de calidad de clasificacion binaria
-        
-        plot(performance(predicciones , measure = "ppv" , x.measure = "cutoff"), main ="PPV vs cutoff") ## grafico de PPV versus punto de corte
-        
-        plot(performance(predicciones , measure = "acc" , x.measure = "cutoff"), main ="Accuracy vs cutoff") ## grafico de PPV versus punto de corte
         
         library(ggplot2)
         
@@ -114,9 +106,13 @@ clasificaciones.test.set.ensemble.promedio.lm <- function (test.set = "Dtest.csv
                 
                 scale_colour_manual(values = c("red", "blue", "green" , "violet" , "yellow" , "orange")) +
                 
+                ggtitle("Test set - lm - Ensemble Promedio") +
+                
                 labs(colour = "Variable", y = NULL) 
         
         print(ggplotly(grafico))
+        
+        }
         
         ## RESUMEN DE LOS RESULTADOS
         
@@ -129,14 +125,14 @@ clasificaciones.test.set.ensemble.promedio.lm <- function (test.set = "Dtest.csv
 
 ########### ACA TERMINA LA FUNCION, PRIMERO LA CARGO Y LUEGO EJECUTO LO DE ABAJO 
 
-clasificaciones.test.set.ensemble.promedio.lm(test.set = "Dtest.csv",cant.modelos = 10, x = tabla.AUC.ordenadas, remover.NA = FALSE)
+clasificaciones.test.set.ensemble.promedio.lm(test.set = "Dtest.csv",cant.modelos = 10, x = tabla.AUC.ordenadas, remover.NA = FALSE, graficar = TRUE)
 
-clasificaciones.test.set.ensemble.promedio.lm(test.set = "Dtest.csv",cant.modelos = 10, x = tabla.AUC.ordenadas.test.set, remover.NA = FALSE)
+clasificaciones.test.set.ensemble.promedio.lm(test.set = "Dtest.csv",cant.modelos = 10, x = tabla.AUC.ordenadas.test.set, remover.NA = FALSE, graficar = TRUE)
 
-clasificaciones.test.set.ensemble.promedio.lm(test.set = "Dtest.csv",cant.modelos = 10, x = tabla.sensibilidad.ordenadas, remover.NA = FALSE)
+clasificaciones.test.set.ensemble.promedio.lm(test.set = "Dtest.csv",cant.modelos = 10, x = tabla.sensibilidad.ordenadas, remover.NA = FALSE, graficar = TRUE)
 
-clasificaciones.test.set.ensemble.promedio.lm(test.set = "Dtest.csv",cant.modelos = 10, x = tabla.AUC.ordenadas.dude, remover.NA = FALSE)
+clasificaciones.test.set.ensemble.promedio.lm(test.set = "Dtest.csv",cant.modelos = 10, x = tabla.AUC.ordenadas.dude, remover.NA = FALSE, graficar = TRUE)
 
-clasificaciones.test.set.ensemble.promedio.lm(test.set = "Dtest.csv",cant.modelos = 10, x = tabla.porcentajes.buenas.clasificaciones.k.fold.CV.lm, remover.NA = FALSE)
+clasificaciones.test.set.ensemble.promedio.lm(test.set = "Dtest.csv",cant.modelos = 10, x = tabla.porcentajes.buenas.clasificaciones.k.fold.CV.lm, remover.NA = FALSE, graficar = TRUE)
 
-clasificaciones.test.set.ensemble.promedio.lm(test.set = "Dtest.csv",cant.modelos = 10, x = tabla.AUROC.k.fold.CV.lm, remover.NA = FALSE)
+clasificaciones.test.set.ensemble.promedio.lm(test.set = "Dtest.csv",cant.modelos = 10, x = tabla.AUROC.k.fold.CV.lm, remover.NA = FALSE, graficar = TRUE)

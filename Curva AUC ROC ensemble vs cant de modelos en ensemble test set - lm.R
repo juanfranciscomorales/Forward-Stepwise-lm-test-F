@@ -1,7 +1,7 @@
 
 data_set <- "S-M test set lm.csv"
 
-tabla <- tabla.AUROC.k.fold.CV.lm
+tabla <- tabla.AUC.ordenadas
 
 ###### ENSEMBLE PROMEDIO ########
 
@@ -17,7 +17,7 @@ cant.modelos <- 1:100 ## le doy la secuencia de la cantidad de modelos a combina
 
 for( i in cant.modelos){
         
-        resultado <- clasificaciones.test.set.ensemble.promedio.lm(test.set = data_set ,cant.modelos = i, x = tabla, remover.NA = FALSE)
+        resultado <- clasificaciones.test.set.ensemble.promedio.lm(test.set = data_set ,cant.modelos = i, x = tabla, remover.NA = FALSE , graficar = FALSE)
         
         vector.AUC.ensembles[i] <-resultado[[2]]
 
@@ -39,7 +39,7 @@ grafica.promedio <- plot_ly(x = ~cant.modelos, y = ~vector.AUC.ensembles,type = 
         
                             error_y = ~list(type = "data", symmetric = FALSE, arrayminus = low_conf_int2, array = high_conf_int2)) %>%
 
-                        layout(xaxis = list(title="Number of individual models included in the ensemble", range = c(0,101) , dtick =5), yaxis=list(title="AUROC" , range = c(0.5 , 1.01) , dtick = 0.05 ))
+                        layout(title = "Ensemble Promedio - Test set" , xaxis = list(title="Number of individual models included in the ensemble", range = c(0,101) , dtick =5), yaxis=list(title="AUROC Test set" , range = c(0.5 , 1.01) , dtick = 0.05 ))
 
 grafica.promedio
 
@@ -65,7 +65,7 @@ cant.modelos <- 1:100 ## le doy la secuencia de la cantidad de modelos a combina
 
 for( i in cant.modelos){
         
-        resultado <- clasificaciones.test.set.ensemble.minimo.lm(test.set = data_set,cant.modelos = i, x = tabla, remover.NA = FALSE)
+        resultado <- clasificaciones.test.set.ensemble.minimo.lm(test.set = data_set,cant.modelos = i, x = tabla, remover.NA = FALSE , graficar = FALSE)
         
         vector.AUC.ensembles[i] <-resultado[[2]]
         
@@ -87,7 +87,9 @@ grafica.minimo <- plot_ly(x = ~cant.modelos, y = ~vector.AUC.ensembles, mode="ma
         
                         error_y = ~list(type = "data", symmetric = FALSE, arrayminus = low_conf_int2,array = high_conf_int2)) %>%
         
-                        layout( xaxis = list(title="Number of individual models included in the ensemble", range = c(0,101) , dtick =5), yaxis=list(title="AUROC" , range = c(0.5 , 1.01) , dtick = 0.05 ))
+                        layout(title = "Ensemble Minimo - Test set",  xaxis = list(title="Number of individual models included in the ensemble", range = c(0,101) , dtick =5), yaxis=list(title="AUROC Test set" , range = c(0.5 , 1.01) , dtick = 0.05 ))
+
+grafica.minimo
 
 htmlwidgets::saveWidget(as.widget(grafica.minimo), file = "AUROC vs cant modelos Ensemble Minimo - Test set o Dude.html")
 

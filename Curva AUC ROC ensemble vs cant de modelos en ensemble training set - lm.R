@@ -1,3 +1,6 @@
+
+tabla <- tabla.AUC.ordenadas
+
 ###### ENSEMBLE PROMEDIO ########
 
 vector.AUC.ensembles <- vector()  ## creo vector vacio donde voy a poner las AUC ROC
@@ -12,7 +15,7 @@ cant.modelos <- 1:100 ## le doy la secuencia de la cantidad de modelos a combina
 
 for( i in cant.modelos){
         
-        resultado <-combinacion.modelos.promedio(cant.modelos = i, x = tabla.AUC.ordenadas.test.set, remover.NA = FALSE)
+        resultado <-combinacion.modelos.promedio(cant.modelos = i, x = tabla , remover.NA = FALSE , graficar = FALSE)
         
         vector.AUC.ensembles[i] <-resultado[[2]]
         
@@ -34,7 +37,7 @@ grafica.promedio <- plot_ly(x = ~cant.modelos, y = ~vector.AUC.ensembles,type = 
         
                         error_y = ~list(type = "data", symmetric = FALSE, arrayminus = low_conf_int2, array = high_conf_int2)) %>%
         
-                        layout(xaxis = list(title="Number of individual models included in the ensemble", range = c(0,101) , dtick =5), yaxis=list(title="AUROC" , range = c(0.5 , 1.01) , dtick = 0.05 ))
+                        layout(title = "Ensemble Promedio - Training set"  , xaxis = list(title="Number of individual models included in the ensemble", range = c(0,101) , dtick =5), yaxis=list(title="AUROC Training set" , range = c(0.5 , 1.01) , dtick = 0.05 ))
 
 grafica.promedio
 
@@ -60,7 +63,7 @@ cant.modelos <- 1:100 ## le doy la secuencia de la cantidad de modelos a combina
 
 for( i in cant.modelos){
         
-        resultado <-combinacion.modelos.minimo(cant.modelos = i, x = tabla.AUC.ordenadas.test.set, remover.NA = FALSE)
+        resultado <-combinacion.modelos.minimo(cant.modelos = i, x = tabla, remover.NA = FALSE , graficar = FALSE)
         
         vector.AUC.ensembles[i] <-resultado[[2]]
         
@@ -83,7 +86,7 @@ grafica.minimo <- plot_ly(x = ~cant.modelos, y = ~vector.AUC.ensembles,type = "s
         
                         error_y = ~list(type = "data", symmetric = FALSE, arrayminus = low_conf_int2, array = high_conf_int2)) %>%
         
-                        layout( xaxis = list(title="Number of individual models included in the ensemble", range = c(0,101) , dtick =5), yaxis=list(title="AUROC" , range = c(0.5 , 1.01) , dtick = 0.05 ))
+                        layout(title = "Ensemble Minimo - Training set"  , xaxis = list(title="Number of individual models included in the ensemble", range = c(0,101) , dtick =5), yaxis=list(title="AUROC Training set" , range = c(0.5 , 1.01) , dtick = 0.05 ))
 
 grafica.minimo
 
