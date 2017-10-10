@@ -37,7 +37,7 @@ clasificaciones.test.set.ensemble.voto.lm2 <- function (test.set = "Dtest.csv",c
 ### LA FUNCION ANTERIOR  LO QUE HACE ES TIRARME EL VALOR DE LA CLASE 
 ### Y EL VALOR  voto promedio PARA CADA COMPUESTO DE LA BASE DUDE
 
-df <- clasificaciones.test.set.ensemble.voto.lm2(test.set  = "Descriptores DUDE 1 Sofi.csv",cant.modelos = 30, x = tabla.AUC.ordenadas.test.set)  ## aplico la funcion anterior para obtener un data frame con los valores de score  voto promedio y la clase real
+df <- clasificaciones.test.set.ensemble.voto.lm2(test.set  = "Dudepoliaminas2016.csv",cant.modelos = 8, x = tabla.AUC.ordenadas.dude)  ## aplico la funcion anterior para obtener un data frame con los valores de score  voto promedio y la clase real
 
 df$clase[df$clase == -1] <- 0 ## esto es por si llega a haber en el archivo original haber puesto a los inactivos como -1, pasarlos a 0
 
@@ -47,7 +47,7 @@ AUC.dude <- curva.roc.dude$auc[[1]] ## calculo el AUC ROC
 
 int.conf.95.AUC.ROC <- curva.roc.dude$ci ## extraigo el intervalo de confianza del AUC ROC
 
-predicciones <- ifelse( df$promedio.voto > resultados.ensemble.voto[[6]], yes = 1,no = 0) ## predicciones aplicando el ensemble de operador voto y usando el punto de corte que obtuve con el training
+predicciones <- ifelse( df$promedio.voto > resultados.ensemble.voto[[8]], yes = 1,no = 0) ## predicciones aplicando el ensemble de operador voto y usando el punto de corte que obtuve con el training
 
 clase <-df$clase #extraigo los valores de la columna clase
 
